@@ -1,4 +1,4 @@
-# OpenCV based human detection and social distance measurement.
+# OpenCV based human detection and social distance measurement. [*Work in Progress*]
 
 # Steps to reproduce the output in Windows 10:
 
