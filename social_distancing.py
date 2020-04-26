@@ -104,12 +104,37 @@ Total_frames_while_detecting = 0
 # start the frames per second throughput estimator
 fps = FPS().start()
 
+
+
+#############trackbar###############3
+# def nothing(x):
+# 		pass
+# cv2.namedWindow('trackbar')
+# cv2.createTrackbar('U_L_X','trackbar',0,500, nothing) #for upper left x coordinate
+# cv2.createTrackbar('U_L_Y','trackbar',0,280, nothing) #for upper left y coordinate
+# cv2.createTrackbar('U_R_X','trackbar',0,500, nothing) #for upper right x coordinate
+# cv2.createTrackbar('U_R_Y','trackbar',0,280, nothing) #for upper right y coordinate
+# cv2.createTrackbar('L_L_X','trackbar',0,500, nothing) #for lower left x coordinate
+# cv2.createTrackbar('L_L_Y','trackbar',0,280, nothing) #for upper left y coordinate
+# cv2.createTrackbar('L_R_X','trackbar',0,500, nothing) #for lower right x coordinate
+# cv2.createTrackbar('L_R_Y','trackbar',0,280, nothing) #for lower right y coordinate
+
+############trackbar################
+
+
+
 # loop over frames from the video stream
 while True:
 	# grab the next frame and handle if we are reading from either
 	# VideoCapture or VideoStream
 	frame = vs.read()
 	frame = frame[1] if args.get("input", False) else frame
+
+
+
+
+
+
 
 	# if we are viewing a video and we did not grab a frame then we
 	# have reached the end of the video
@@ -139,6 +164,46 @@ while True:
 	status = "Waiting"
 	rects = []
 
+
+		### implementing homography
+
+	# U_L_X=cv2.getTrackbarPos('U_L_X','trackbar')
+	# U_L_Y=cv2.getTrackbarPos('U_L_Y','trackbar')
+	# U_R_X=cv2.getTrackbarPos('U_R_X','trackbar')
+	# U_R_Y=cv2.getTrackbarPos('U_R_Y','trackbar')
+	# L_L_X=cv2.getTrackbarPos('L_L_X','trackbar')
+	# L_L_Y=cv2.getTrackbarPos('L_L_Y','trackbar')
+	# L_R_X=cv2.getTrackbarPos('L_R_X','trackbar')
+	# L_R_Y=cv2.getTrackbarPos('L_R_Y','trackbar')
+
+	# cv2.circle(frame,(U_L_X,U_L_Y),25,(255,0,0),-1)
+	# cv2.circle(frame,(U_R_X,U_R_Y),25,(120,53,40),-1)
+	# cv2.circle(frame,(L_L_X,L_L_Y),25,(0,255,0),-1)
+	# cv2.circle(frame,(L_R_X,L_R_Y),25,(0,0,255),-1)
+
+	U_L_X= 277
+	U_L_Y= 3
+	U_R_X= 481
+	U_R_Y= 2
+	L_L_X= 5
+	L_L_Y= 137
+	L_R_X= 438
+	L_R_Y= 271
+
+	pts1=np.float32([[U_L_X,U_L_Y],[U_R_X,U_R_Y],[L_L_X,L_L_Y],[L_R_X,L_R_Y]])
+	# print(pts1)
+
+	pts2=np.float32([[0,0],[280,0],[0,500],[280,500]])
+
+	M=cv2.getPerspectiveTransform(pts1,pts2)
+
+	# print("M======================",M)
+
+	res=cv2.warpPerspective(frame,M,(280,500))
+
+	##################################################
+
+
 	# Total_frames_while_detecting = 0
 
 	# check to see if we should run a more computationally expensive
@@ -163,6 +228,8 @@ while True:
 		pos_dict = dict()
 
 		coordinates = dict()
+
+		warped_coordinates = dict()
 
 
 		# loop over the detections
@@ -200,6 +267,18 @@ while True:
 					pos_dict[i] = mid_points
 
 					print("{}: {}: {:06.2f}: {:06.2f}".format(datetime.datetime.now(), "Locations of detection", x_mid, y_mid))
+
+					## Finding warped coordinates by inputing mid points of detections
+
+					points = (x_mid, y_mid)
+
+					p = points
+					matrix = M
+					px = (matrix[0][0]*p[0] + matrix[0][1]*p[1] + matrix[0][2]) / ((matrix[2][0]*p[0] + matrix[2][1]*p[1] + matrix[2][2]))
+					py = (matrix[1][0]*p[0] + matrix[1][1]*p[1] + matrix[1][2]) / ((matrix[2][0]*p[0] + matrix[2][1]*p[1] + matrix[2][2]))
+					p_after = (int(px), int(py))
+					
+					warped_coordinates[i] = p_after
 
 					# construct a dlib rectangle object from the bounding
 					# box coordinates and then start the dlib correlation
@@ -251,7 +330,13 @@ while True:
 				COLOR = (255,0,0)
 			(startX, startY, endX, endY) = coordinates[i]
 
-			 # print(frame, startX, startY, endX, endY, COLOR)
+			# print(frame, startX, startY, endX, endY, COLOR)
+
+			(wx, wy) = warped_coordinates[i]
+
+			htspts = cv2.circle(res, (wx,wy), 6, COLOR, -1)
+
+			cv2.imshow('Hotspots_ Homography', htspts)
 
 			cv2.rectangle(frame, (startX, startY), (endX, endY), COLOR, 2)
 			y = startY - 15 if startY - 15 > 15 else startY + 15
