@@ -1,8 +1,5 @@
 # OpenCV based human detection and social distance measurement.
 
-# Requirements: 
-Use Anaconda for Python 3.7 to create environment from `environment.yml`
-
 # Steps to reproduce the code in Windows 10:
 
 * Step 1: Install Anaconda as Administrator for Windows (3.7 Version) https://www.anaconda.com/distribution/#windows
@@ -25,4 +22,43 @@ This command will create log file (in txt format) in the logs folder in the proj
 * Step 12: If running multiple instances of the application, Open the Anaconda Prompt, Go to the Project Directory and follow step 9 and 10.
 
 # Output
+
+![](Assets/output.gif)
+
+![](Assets/output_1.gif)
+
+
+# Techniques Used
+
+* OpenCV based Object Detection SSD MobileNet Model for identifying people.
+* dlib based object tracker to track people and provide IDs.
+* OpenCV based Perspective correction to get bird view of the street.
+* Triangle similarity based distance estimation between group of people.
+
+# Limitations (Short Term)
+
+* Currently, A weak human detector (MobileNet SSD) is employed for test purposes, other detectors (YOLO or Faster RCNN) can be easily tested which may provide better accuracy. The current detector is used so as to run with fewer system resources.
+* Algorithm not currently tested in the work (indoor) environment, only in webcam videos of pedestrians (outdoor). The Indoor environment may provide more challenges as part of human body would be occluded with furnitures, machines, etc.
+* Algorithm can make use of multiple cameras focusing the view, if available to arrive at better localization and estimation of distances.
+
+# Limitations (Long Term)
+
+* Occlusion: The application will fail to detect persons, if they are hidden behind another person or machines/furnitures as seen from the camera perspective. 
+* The Calibration step (while using Triangle Similarity Technique) is important to arrive at maximum accuracy in depth estimation. Although a hardcoded value can be used in the algorithm, which might solve the said purpose but with less accuracy.
+
+
+# References
+A big shoutout to the people involved in the Similar projects. This work is nothing but a compilation of codes from these repositories.
+You can visit individual link for in depth discussion on the methods.
+
+* Triangle similarity technique (https://github.com/Subikshaa/Social-Distance-Detection-using-OpenCV) by Subikshaa (https://github.com/Subikshaa)
+* People Counter (https://www.pyimagesearch.com/2018/08/13/opencv-people-counter/) by Adrian Rosebrock
+* Object Detection with Deep Learning and OpenCV (https://www.pyimagesearch.com/2017/09/11/object-detection-with-deep-learning-and-opencv/) by Adrian Rosebrock
+
+Also
+
+* Landing AI (https://landing.ai/landing-ai-creates-an-ai-tool-to-help-customers-monitor-social-distancing-in-the-workplace/)
+
+
+ 
  
