@@ -1,6 +1,6 @@
 # OpenCV based human detection and social distance measurement.
 
-# Steps to reproduce the code in Windows 10:
+# Steps to reproduce the output in Windows 10:
 
 * Step 1: Install Anaconda as Administrator for Windows (3.7 Version) https://www.anaconda.com/distribution/#windows
 * Step 1A: Read the instructions to install. https://docs.anaconda.com/anaconda/install/windows/
