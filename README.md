@@ -32,19 +32,19 @@ This command will create log file (in txt format) in the logs folder in the proj
 
 * OpenCV based Object Detection SSD MobileNet Model for identifying people.
 * dlib based object tracker to track people and provide IDs.
-* OpenCV based Perspective correction to get bird view of the street.
+* OpenCV based Perspective correction (Homography) to get bird view of the street.
 * Triangle similarity based distance estimation between group of people.
 
 # Limitations (Short Term)
 
 * Currently, A weak human detector (MobileNet SSD) is employed for test purposes, other detectors (YOLO or Faster RCNN) can be easily tested which may provide better accuracy. The current detector is used so as to run with fewer system resources.
-* Algorithm not currently tested in the work (indoor) environment, only in webcam videos of pedestrians (outdoor). The Indoor environment may provide more challenges as part of human body would be occluded with furnitures, machines, etc.
+* Algorithm not currently tested in the work (indoor) environment, only in webcam videos of pedestrians (outdoor). 
 * Algorithm can make use of multiple cameras focusing the view, if available to arrive at better localization and estimation of distances.
 
 # Limitations (Long Term)
 
-* Occlusion: The application will fail to detect persons, if they are hidden behind another person or machines/furnitures as seen from the camera perspective. 
-* The Calibration step (while using Triangle Similarity Technique) is important to arrive at maximum accuracy in depth estimation. Although a hardcoded value can be used in the algorithm, which might solve the said purpose but with less accuracy.
+* Occlusion: The application will fail to detect persons, if they are hidden behind another person or machines/furnitures as seen from the camera perspective. The Indoor environment may provide more challenges as part of human body would be occluded with furnitures, machines, etc.
+* The Calibration step (while using Triangle Similarity Technique) is important to arrive at maximum accuracy in depth estimation. Currently, a hardcoded value is used in the algorithm, which might solve the said purpose but with less accuracy.
 
 
 # References
